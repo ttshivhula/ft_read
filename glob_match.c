@@ -27,7 +27,7 @@ int glob_match(char const *pat, char const *str)
 	 * it against the remaining unmatched tail of str.  Return false
 	 * on mismatch, or true after matching the trailing nul bytes.
 	 */
-	for (;;) {
+	while (1) {
 		unsigned char c = *str++;
 		unsigned char d = *pat++;
 
