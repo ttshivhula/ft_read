@@ -13,8 +13,8 @@
 NAME = libftread.a
 
 SRC = ft_key.c  init_term.c navigation.c \
-	  window.c history.c tc_print.c \
-	  cmove.c  input.c ft_read.c \
+	  window.c history.c tc_print.c files_glob.c glob.c \
+	  cmove.c  input.c ft_read.c glob_match.c \
 
 FLAG = -Wall -Werror -Wextra
 SILENT = --no-print-directory

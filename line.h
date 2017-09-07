@@ -6,7 +6,7 @@
 /*   By: ttshivhu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/07 08:44:02 by ttshivhu          #+#    #+#             */
-/*   Updated: 2017/09/07 10:21:26 by ttshivhu         ###   ########.fr       */
+/*   Updated: 2017/09/07 13:34:13 by ttshivhu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,6 +99,10 @@ t_dlist				*get_history(void);
 
 void				raw_mode(void);
 void				default_mode(void);
+
+int					glob_match(char const *pat, char const *str);
+char				**get_files(void);
+char				*glob_replace(char *str);
 
 char				*ft_read(void);
 #endif
