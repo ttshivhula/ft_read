@@ -6,7 +6,7 @@
 /*   By: ttshivhu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/07 10:23:06 by ttshivhu          #+#    #+#             */
-/*   Updated: 2017/09/07 10:24:02 by ttshivhu         ###   ########.fr       */
+/*   Updated: 2017/09/07 11:20:37 by ttshivhu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,7 @@ char	*ft_read(void)
 
 	raw_mode();
 	ft_bzero(&line, sizeof(line));
-	line.hist = retrieve_history();
+	line.hist = get_history();
 	line.hist_size = ft_dlstsize(line.hist);
 	get_cursor_start_pos(&line);
 	input_loop(&line);
