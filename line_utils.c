@@ -19,7 +19,7 @@ int				read_u(t_read *line, int key_pressed)
 
 	if (copy_paste(line, key_pressed) == 1)
 		return (1);
-	if (key_pressed == '\t' && ft_strlen(line->cmd))
+	if (key_pressed == '\t' && ft_strlen(ft_strtrim(line->cmd)))
 		return (autocomplete(line));
 	if (line->cmd[0] == '!' && key_pressed == '\n')
 	{

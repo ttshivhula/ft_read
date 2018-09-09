@@ -24,18 +24,17 @@ SRC = ft_key.c  init_term.c navigation.c \
 	  files_glob.c \
 	  glob_match.c \
 
-FLAG = -Wall -Werror -Wextra -g3
+CFLAGS = -Wall -Werror -Wextra -g3
 SILENT = --no-print-directory
 
 OBJ = $(SRC:.c=.o)
 
 all: $(NAME)
 
-$(NAME):
-	@make -C libft $(SILENT)
-	@gcc $(FLAG) -c $(SRC)
-	@ar rc $(NAME) $(OBJ) libft/*.o 
-	@ranlib $(NAME)
+$(NAME): $(OBJ)
+	make -C libft $(SILENT)
+	ar rc $(NAME) $(OBJ) libft/*.o 
+	ranlib $(NAME)
 
 clean:
 	@make clean -C libft $(SILENT)
