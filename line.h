@@ -6,7 +6,7 @@
 /*   By: ttshivhu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/07 08:44:02 by ttshivhu          #+#    #+#             */
-/*   Updated: 2017/09/07 10:21:26 by ttshivhu         ###   ########.fr       */
+/*   Updated: 2017/09/25 09:16:30 by ttshivhu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,8 +38,16 @@
 # define KEY_CODE_SRI "\x1b\x1b\x5b\x43"
 # define KEY_CODE_SLE "\x1b\x1b\x5b\x44"
 # define KEY_CTRLL 12
-# define HISTORY_PATH ".LINE_HST"
+# define KEY_CTRLC 3
+# define KEY_CTRLD 4
+# define KEY_CTRLW 23
+# define KEY_CTRLG 7
+# define KEY_CTRLV 22
 # define MAX_CMD_LEN 4096
+
+char				*g_path;
+
+char				**set_local(char **vars);
 
 typedef struct		s_winsz
 {
@@ -74,8 +82,6 @@ struct				s_keymatch
 };
 
 int					ft_key(void);
-
-char				*line_editing(void);
 void				ft_dlstdelstr(t_dlist **lst);
 void				goto_next_word(t_read *line);
 void				goto_prev_word(t_read *line);
@@ -91,6 +97,8 @@ int					ft_windowsize(t_winsz *winsz);
 void				ft_delete_char(t_read *read, int key);
 void				ft_insert_char(t_read *read, int key);
 int					tc_putc(int c);
+void				feed_line(t_read *line, char *entry);
+char				*ft_history(char *num);
 
 void				add_history(char *entry);
 void				old_hist_entry(t_read *read, t_dlist **hist);
@@ -99,6 +107,31 @@ t_dlist				*get_history(void);
 
 void				raw_mode(void);
 void				default_mode(void);
+char				*env_getenv(char *key);
 
+void				free_ptr(char **ptr);
+void				ft_free_join(char **holder, char *s1, char *s2);
+char				*free_dup(char *dest, char *src);
+
+void				input_loop(t_read *line);
+char				*reader(t_read *line);
 char				*ft_read(void);
+
+void				insert_auto(t_read *line, char *entry);
+
+void				scroll_up(t_read *line);
+int					read_u(t_read *line, int key_pressed);
+int					autocomplete(t_read *line);
+int					echo_auto(t_read *line, char *opt);
+char				*ft_sstrcpy(char *dest, char *src);
+int					copy_paste(t_read *line, int key_pressed);
+
+char				*glob_files(char *match);
+int					match(char *s1, char *s2);
+int					glob_match(char *pat, char *str);
+char				*glob_replace(char *str);
+
+char				*get_bins(char *match);
+char				*auto_files(char *match);
+
 #endif

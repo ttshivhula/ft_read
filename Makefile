@@ -6,17 +6,25 @@
 #    By: ttshivhu <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/09/07 08:36:01 by ttshivhu          #+#    #+#              #
-#    Updated: 2017/09/07 10:18:44 by ttshivhu         ###   ########.fr        #
+#    Updated: 2017/09/25 09:15:50 by ttshivhu         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = libftread.a
 
 SRC = ft_key.c  init_term.c navigation.c \
-	  window.c history.c tc_print.c \
-	  cmove.c  input.c ft_read.c \
+	  window.c history.c tc_print.c  \
+	  cmove.c  input.c ft_read.c free.c \
+	  auto_bins.c \
+	  files_auto.c \
+	  line_utils.c \
+	  line_utils2.c \
+	  cmd_history.c \
+	  glob.c \
+	  files_glob.c \
+	  glob_match.c \
 
-FLAG = -Wall -Werror -Wextra
+FLAG = -Wall -Werror -Wextra -g3
 SILENT = --no-print-directory
 
 OBJ = $(SRC:.c=.o)
@@ -28,7 +36,6 @@ $(NAME):
 	@gcc $(FLAG) -c $(SRC)
 	@ar rc $(NAME) $(OBJ) libft/*.o 
 	@ranlib $(NAME)
-	@printf "\x1b[32mCompiled $(NAME) successfully\x1b[31m\n"
 
 clean:
 	@make clean -C libft $(SILENT)
