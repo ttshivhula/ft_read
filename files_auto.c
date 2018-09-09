@@ -1,38 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   tc_print.c                                         :+:      :+:    :+:   */
+/*   glob.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ttshivhu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/09/07 09:26:20 by ttshivhu          #+#    #+#             */
-/*   Updated: 2017/09/22 08:39:43 by ttshivhu         ###   ########.fr       */
+/*   Created: 2017/09/07 10:29:26 by ttshivhu          #+#    #+#             */
+/*   Updated: 2017/09/22 09:10:41 by ttshivhu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "line.h"
 
-int		tc_putc(int c)
+char			*auto_files(char *match)
 {
-	return (write(0, &c, 1));
-}
+	DIR				*dirp;
+	struct dirent	*entry;
+	char			*ret;
 
-char	*env_getenv(char *key)
-{
-	int			i;
-	char		*ret;
-	extern char	**environ;
-
-	i = 0;
-	while (environ[i])
+	if ((dirp = opendir(".")))
 	{
-		if ((ft_strncmp(environ[i], key, ft_strlen(key))) == 0 &&
-				(environ[i][ft_strlen(key)] == '='))
+		ret = ft_strdup(" ");
+		while ((entry = readdir(dirp)) != NULL)
 		{
-			ret = ft_strdup(ft_strchr(environ[i], '=') + 1);
-			return (ret);
+			if (ft_strncmp(entry->d_name, match, ft_strlen(match)) == 0)
+			{
+				ft_free_join(&ret, ret, entry->d_name);
+				ft_free_join(&ret, ret, " ");
+			}
 		}
-		i++;
+		closedir(dirp);
+		return (ret);
 	}
-	return (NULL);
+	return (ft_strdup(" null "));
 }

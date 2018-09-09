@@ -12,12 +12,6 @@
 
 #include "line.h"
 
-/*
-** Reads MAX_KEY_LEN at a time. Matches the string with a list of known
-** key sequences. Then returns the value of the key_pressed contained in
-** curses.h
-*/
-
 static int	match_key(char *key_str, int i)
 {
 	static struct s_keymatch	key_couple[11] = {
@@ -40,12 +34,6 @@ static int	match_key(char *key_str, int i)
 			return (key_couple[i - 1].key_ret);
 	return (key_str[0]);
 }
-
-/*
-** Small particularity of this function lies in the fact that we first read 1
-** character. If this value equals '\x1b' we read 3 other chars.
-** This behaviour makes copied text works.
-*/
 
 int			ft_key(void)
 {

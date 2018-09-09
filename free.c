@@ -1,38 +1,46 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   tc_print.c                                         :+:      :+:    :+:   */
+/*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ttshivhu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/09/07 09:26:20 by ttshivhu          #+#    #+#             */
-/*   Updated: 2017/09/22 08:39:43 by ttshivhu         ###   ########.fr       */
+/*   Created: 2017/09/08 13:40:33 by ttshivhu          #+#    #+#             */
+/*   Updated: 2017/09/25 08:39:12 by ttshivhu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "line.h"
 
-int		tc_putc(int c)
+void	free_ptr(char **ptr)
 {
-	return (write(0, &c, 1));
-}
+	int i;
 
-char	*env_getenv(char *key)
-{
-	int			i;
-	char		*ret;
-	extern char	**environ;
-
+	if (ptr == NULL)
+		return ;
 	i = 0;
-	while (environ[i])
+	while (ptr[i] != NULL)
 	{
-		if ((ft_strncmp(environ[i], key, ft_strlen(key))) == 0 &&
-				(environ[i][ft_strlen(key)] == '='))
-		{
-			ret = ft_strdup(ft_strchr(environ[i], '=') + 1);
-			return (ret);
-		}
+		free(ptr[i]);
 		i++;
 	}
-	return (NULL);
+	if (ptr != NULL)
+		free(ptr);
+}
+
+char	*free_dup(char *dest, char *src)
+{
+	if (dest != NULL)
+		free(dest);
+	return (ft_strdup(src));
+}
+
+void	ft_free_join(char **holder, char *s1, char *s2)
+{
+	char	*tmp;
+
+	tmp = *holder;
+	*holder = ft_strjoin(s1, s2);
+	if (tmp != NULL)
+		free(tmp);
 }

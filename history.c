@@ -12,7 +12,7 @@
 
 #include "line.h"
 
-static void	feed_line(t_read *line, char *entry)
+void		feed_line(t_read *line, char *entry)
 {
 	chome(line);
 	tputs(tgetstr("cd", NULL), 0, &tc_putc);
@@ -26,6 +26,8 @@ void		new_hist_entry(t_read *line, t_dlist **hist)
 {
 	if (line->hist && !line->hist_depth)
 		return ;
+	if (!line->hist)
+		return ;
 	line->hist_depth--;
 	*hist = (*hist)->prev;
 	feed_line(line, (*hist)->content);
@@ -37,6 +39,8 @@ void		new_hist_entry(t_read *line, t_dlist **hist)
 void		old_hist_entry(t_read *line, t_dlist **hist)
 {
 	if (line->hist && line->hist_depth == line->hist_size)
+		return ;
+	if (!line->hist)
 		return ;
 	if (!line->hist_depth)
 		ft_dlstadd(hist, ft_dlstnew(line->cmd, ft_strlen(line->cmd) + 1));
@@ -52,7 +56,7 @@ void		add_history(char *entry)
 
 	if (!(*entry))
 		return ;
-	fd = open(HISTORY_PATH, O_WRONLY | O_APPEND | O_CREAT, 0644);
+	fd = open(g_path, O_WRONLY | O_APPEND | O_CREAT, 0644);
 	if (fd == -1)
 	{
 		ft_putendl_fd("Could not open history", 2);
@@ -64,13 +68,13 @@ void		add_history(char *entry)
 
 t_dlist		*get_history(void)
 {
-	int		fd;
-	t_dlist	*hist;
-	char	*line;
-	size_t	len;
+	int			fd;
+	t_dlist		*hist;
+	char		*line;
+	size_t		len;
 
 	hist = NULL;
-	fd = open(HISTORY_PATH, O_RDONLY);
+	fd = open(g_path, O_RDWR);
 	if (fd == -1)
 		return (NULL);
 	while (get_next_line(fd, &line))

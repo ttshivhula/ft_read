@@ -12,6 +12,19 @@
 
 #include "line.h"
 
+void	insert_auto(t_read *line, char *entry)
+{
+	chome(line);
+	tputs(tgetstr("cd", NULL), 0, &tc_putc);
+	ft_bzero(line->cmd, MAX_CMD_LEN);
+	ft_strcpy(line->cmd, entry);
+	line->cursor = ft_strlen(entry);
+	line->length = line->cursor;
+	tputs(tgetstr("im", NULL), 1, &tc_putc);
+	ft_putstr_fd(line->cmd, 0);
+	tputs(tgetstr("ei", NULL), 1, &tc_putc);
+}
+
 void	ft_insert_char(t_read *line, int key)
 {
 	if (line->length + 1 >= MAX_CMD_LEN)

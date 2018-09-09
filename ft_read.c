@@ -6,7 +6,7 @@
 /*   By: ttshivhu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/07 10:23:06 by ttshivhu          #+#    #+#             */
-/*   Updated: 2017/09/07 11:20:37 by ttshivhu         ###   ########.fr       */
+/*   Updated: 2017/09/25 08:35:49 by ttshivhu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,12 @@
 
 void	get_cursor_start_pos(t_read *line)
 {
-	char	answer[20];
+	char	answer[100];
 	int		i;
 
 	ft_putstr_fd("\e[6n", 0);
-	ft_bzero(answer, 20);
-	i = read(0, answer, 20);
+	ft_bzero(answer, 100);
+	i = read(0, answer, 100);
 	answer[i] = 0;
 	i = 2;
 	line->start.row = ft_atoi(answer + i);
@@ -60,6 +60,7 @@ void	match_move(int key_pressed, t_read *line)
 	while (i < 8)
 		if (key_pressed == keymove[i++].key)
 			keymove[i - 1].p(line);
+	match_hist(key_pressed, line);
 }
 
 void	input_loop(t_read *line)
@@ -73,55 +74,45 @@ void	input_loop(t_read *line)
 		if (line->start.row + line->cursor / line->winsz.col > line->winsz.row)
 			line->start.row--;
 		match_move(key_pressed, line);
-		match_hist(key_pressed, line);
 		if (key_pressed > 31 && key_pressed < 127)
 			ft_insert_char(line, key_pressed);
 		if (key_pressed == KEY_DC || key_pressed == 127)
 			ft_delete_char(line, key_pressed);
 		if (key_pressed == KEY_CTRLL)
+			scroll_up(line);
+		if (key_pressed == KEY_CTRLC)
 		{
-			tputs(tgoto(tgetstr("SF", NULL), 0, line->start.row - 1)
-					, 1, &tc_putc);
-			line->start.row = 1;
-			set_curpos(line);
+			ft_bzero(line->cmd, ft_strlen(line->cmd));
+			break ;
 		}
-		if (key_pressed == '\n')
+		if (read_u(line, key_pressed))
 			break ;
 	}
 }
 
 char	*ft_read(void)
 {
-	t_read	line;
+	t_read		line;
+	char		cline[MAX_CMD_LEN];
+	int			i;
+	int			fd;
 
 	raw_mode();
 	ft_bzero(&line, sizeof(line));
 	line.hist = get_history();
 	line.hist_size = ft_dlstsize(line.hist);
 	get_cursor_start_pos(&line);
-	input_loop(&line);
-	cend(&line);
-	default_mode();
-	ft_putchar('\n');
-	add_history(line.cmd);
-	ft_dlstdelstr(&line.hist);
-	//must add globing and !history type .... 
-	if (line.cmd[0] == '!' && ft_isdigit(line.cmd[1]))
+	fd = open(".auto", O_RDONLY);
+	i = read(fd, cline, MAX_CMD_LEN);
+	cline[i] = '\0';
+	i = close(fd) ? 0 : 0;
+	ft_strcpy(line.cmd, cline);
+	tputs(tgetstr("im", NULL), 1, &tc_putc);
+	while (cline[i])
 	{
-		char *fuck;
-		int num = ft_atoi(line.cmd + 1);
-		int fd = open(HISTORY_PATH, O_RDONLY);
-		int i = 0;
-		while (get_next_line(fd, &fuck))
-		{
-			if (i == num)
-				return (fuck);
-			i++;
-			free(fuck);
-		}
-		fuck = ft_strdup("no-fuck ");
-		fuck = ft_strjoin(fuck, ft_itoa(num));
-		return (ft_strdup(fuck));
+		line.length++;
+		line.cursor++;
+		ft_putchar_fd(cline[i++], 0);
 	}
-	return (ft_strdup(line.cmd));
+	return (glob_replace(reader(&line)));
 }
